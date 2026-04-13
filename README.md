@@ -1,3 +1,5 @@
+# Repository for the Module 3 of the Fullstack Development Postgraduate Course
+The purpose of this repository is to continuously see the progress of the project developed in classes during the module 3. This project follows the Clean Architecture software design philosophy. 
 # Quickstart
 ## Prerequisites
 - Node 22+

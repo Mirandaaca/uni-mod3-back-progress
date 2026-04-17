@@ -6,9 +6,19 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
     dialect: "mysql",
   },
 );
+
+export const connectMysql = async () => {
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync({ alter: true });
+    console.log("Connected to MySQL");
+  } catch (error) {
+    console.error("Error connecting to MySQL:", error);
+    process.exit(1);
+  }
+};
 
 export default sequelize;

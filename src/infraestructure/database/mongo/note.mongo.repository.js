@@ -1,4 +1,4 @@
-import NoteModel from "./note.model";
+import NoteModel from "./note.model.js";
 
 export default class NoteMongoRepository {
     async save(noteEntity){

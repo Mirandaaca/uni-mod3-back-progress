@@ -21,4 +21,9 @@ export default class NoteService {
   async getNoteByUser(userId) {
     return await this._noteRepository.findByUserId(userId);
   }
+
+  // Alias para coincidir con el controlador/rutas
+  async getNotesByUserId(userId) {
+    return await this._noteRepository.findByUserId(userId);
+  }
 }

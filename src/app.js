@@ -5,6 +5,7 @@ import 'express-async-errors';
 import morgan from 'morgan';
 import { loggerMiddleware } from './presentation/middlewares/logger.middleware.js';
 import noteRoutes from './presentation/routes/note.routes.js';
+import authRoutes from './presentation/routes/auth.routes.js';
 import { connectMongo } from './infraestructure/database/mongo/connection.js';
 //import { connectMySQL } from './infraestructure/database/mysql/connection.js';
 import dns from "node:dns/promises";
@@ -29,6 +30,7 @@ app.use(loggerMiddleware);
 app.use('/uploads', express.static('uploads'));
 
 app.use('/api/v1', noteRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 // primer endpoint de tipo GET
 app.get('/api/health', (req, res) => {

@@ -16,7 +16,7 @@ dns.setServers(["1.1.1.1"]);
 
 
 await connectMongo();
-//await connectMySQL();
+await connectMySQL();
 
 
 const app = express();

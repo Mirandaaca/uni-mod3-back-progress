@@ -2,28 +2,45 @@
 import NoteEntity from "../../domain/entities/note.entity.js"; // agregar al final un .js ya que es requerido para ESM
 // Logica de Negocio
 export default class NoteService {
-  _noteRepository;
-  constructor(NoteRepository) {
-    this._noteRepository = NoteRepository;
+  constructor(noteRepository, mailService) {
+    this.noteRepository = noteRepository;
+    this.mailService = mailService;
   }
 
-  // Logica de Negocio
   async createNote(data) {
     if (!data.title || !data.content) {
       throw new Error("Title and content are required");
     }
-    // Se instancia un nuevo objeto de la clase nota, y se le pasan los parametros necesarios para crear un objeto
+
     const note = new NoteEntity(data);
-    // Se llama al metodo save del repositorio, y se le pasa el objeto nota, para que lo guarde en la base de datos, y se retorna el resultado
-    return await this._noteRepository.save(note);
+    return await this.noteRepository.save(note);
   }
 
-  async getNoteByUser(userId) {
-    return await this._noteRepository.findByUserId(userId);
-  }
-
-  // Alias para coincidir con el controlador/rutas
   async getNotesByUserId(userId) {
-    return await this._noteRepository.findByUserId(userId);
+    return await this.noteRepository.findByUserId(userId);
+  }
+
+  async updateNote(id, data) {
+    const note = await this.noteRepository.update(id, data);
+    if (!note) throw new Error("Note not found");
+    return note;
+  }
+
+  async deleteNote(id) {
+    const note = await this.noteRepository.delete(id);
+    if (!note) throw new Error("Note not found");
+    return { message: "Note deleted successfully" };
+  }
+
+  async shareNoteByEmail(noteId, targetEmail, currentUserId) {
+    const note = await this.noteRepository.findById(noteId);
+    if (!note) throw new Error("Note not found");
+
+    // RESTRICCIÓN: Solo el dueño puede compartirla
+    if (note.userId !== currentUserId) {
+      throw new Error("Unauthorized: You can only share your own notes");
+    }
+
+    return await this.mailService.sendNoteEmail(targetEmail, note);
   }
 }

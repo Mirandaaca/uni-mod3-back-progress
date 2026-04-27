@@ -16,6 +16,12 @@ export default class NoteService {
     return await this.noteRepository.save(note);
   }
 
+  async getNoteById(id){
+    const note = await this.noteRepository.findById(id);
+    if (!note) throw new Error("Note not found");
+    return note;
+  }
+
   async getNotesByUserId(userId) {
     return await this.noteRepository.findByUserId(userId);
   }

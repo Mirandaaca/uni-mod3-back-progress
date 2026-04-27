@@ -6,7 +6,7 @@ export default class NoteController {
   createNote = async (req, res) => {
     const data = req.body;
     if (req.file) data.imageUrl = "/uploads/" + req.file.filename;
-    data.userId = req.user.id; //TODO:  LUEGO OBTENER EL USUARIO DE LA SESION O TOKEN
+    data.userId = req.user.id; // se asigna el userId del usuario autenticado a la nota, para que se pueda relacionar la nota con el usuario que la creo, y asi poder obtener las notas de un usuario especifico, y evitar que un usuario pueda acceder a las notas de otro usuario, ya que solo podra acceder a las notas que tengan su userId.
     try {
       const note = await this.noteService.createNote(data);
       res.status(201).json(note); // 201 Created

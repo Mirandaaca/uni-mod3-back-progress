@@ -7,8 +7,9 @@ import { loggerMiddleware } from './presentation/middlewares/logger.middleware.j
 import noteRoutes from './presentation/routes/note.routes.js';
 import authRoutes from './presentation/routes/auth.routes.js';
 import { connectMongo } from './infraestructure/database/mongo/connection.js';
-//import { connectMySQL } from './infraestructure/database/mysql/connection.js';
+import { connectMysql } from './infraestructure/database/mysql/connection.js';
 import dns from "node:dns/promises";
+import { setupSwagger } from './infraestructure/config/swagger.config.js';
 dns.setServers(["1.1.1.1"]);
 
 //console.log(await dns.getServers());
@@ -16,20 +17,21 @@ dns.setServers(["1.1.1.1"]);
 
 
 await connectMongo();
-await connectMySQL();
+await connectMysql();
 
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+setupSwagger(app); // Configuramos Swagger para la documentación de la API
 app.use(morgan('dev'));
 app.use(loggerMiddleware);
 
 // uso de imagenes estaticas
 app.use('/uploads', express.static('uploads'));
 
-app.use('/api/v1', noteRoutes);
+app.use('/api/v1/notes', noteRoutes);
 app.use('/api/v1/auth', authRoutes);
 
 // primer endpoint de tipo GET

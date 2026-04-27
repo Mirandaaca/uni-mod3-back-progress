@@ -1,5 +1,4 @@
-import { NoteModel } from "./note.model.js";
-
+import NoteModel from "./note.model.js";
 export default class NoteMySQLRepository {
   async save(noteEntity) {
     // Se llama al metodo create de sequelize, y se le pasan los parametros necesarios para crear un objeto, y se retorna el resultado

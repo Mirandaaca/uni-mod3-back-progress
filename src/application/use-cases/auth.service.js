@@ -1,6 +1,6 @@
-import UserEntity from "../../domain/entities/user.entity";
-import HashService from "../../infraestructure/security/hash.service";
-import JwtService from "../../infraestructure/security/jwt.service";
+import UserEntity from "../../domain/entities/user.entity.js";
+import HashService from "../../infraestructure/security/hash.service.js";
+import JwtService from "../../infraestructure/security/jwt.service.js";
 
 export default class AuthService {
   constructor(userRepository) {

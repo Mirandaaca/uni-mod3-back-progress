@@ -14,7 +14,19 @@ export default class NoteController {
       res.status(400).json({ error: error.message });
     }
   };
-
+  getNoteById = async (req, res) => {
+    const { id } = req.params; // Id a partir de los parametros de la ruta
+    // Hay dos formas de sacar informacion, ya sea por query params o path params, en este caso se saca por path params, ya que es una informacion que forma parte de la ruta, y no es opcional, a diferencia de los query params que son opcionales y no forman parte de la
+    // Los path params se definen en la ruta con :id, y se acceden en el controlador con req.params.id, mientras que los query params se definen en la ruta con ?id=123, y se acceden en el controlador con req.query.id
+    // Los query params se utilizan para filtrar o paginar resultados, mientras que los path params se utilizan para identificar un recurso especifico, como en este caso una nota especifica, y es necesario para poder obtener la nota, mientras que los query params son opcionales y no son necesarios para obtener la nota, ya que se pueden obtener todas las notas de un usuario sin necesidad de un query param, pero no se puede obtener una nota especifica sin un path param.
+    // La principal diferencia entonces es que los path params son obligatorios y forman parte de la ruta, mientras que los query params son opcionales y no forman parte de la ruta, y se utilizan para filtrar o paginar resultados, mientras que los path params se utilizan para identificar un recurso especifico.
+    try {
+      const note = await this.noteService.getNoteById(id);
+      res.status(200).json(note);
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
+  };
   getNotesByUserId = async (req, res) => {
     const userId = req.user.id;
     try {

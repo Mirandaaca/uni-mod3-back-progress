@@ -26,13 +26,29 @@ export default class NoteService {
     return await this.noteRepository.findByUserId(userId);
   }
 
-  async updateNote(id, data) {
+  async updateNote(id, data, currentUserId) {
+    const existingNote = await this.noteRepository.findById(id);
+    if (!existingNote) throw new Error("Note not found");
+
+    // RESTRICCIÓN: Solo el dueño puede actualizarla
+    if (existingNote.userId !== currentUserId) {
+      throw new Error("Unauthorized: You can only update your own notes");
+    }
+
     const note = await this.noteRepository.update(id, data);
     if (!note) throw new Error("Note not found");
     return note;
   }
 
-  async deleteNote(id) {
+  async deleteNote(id, currentUserId) {
+    const existingNote = await this.noteRepository.findById(id);
+    if (!existingNote) throw new Error("Note not found");
+
+    // RESTRICCIÓN: Solo el dueño puede eliminarla
+    if (existingNote.userId !== currentUserId) {
+      throw new Error("Unauthorized: You can only delete your own notes");
+    }
+
     const note = await this.noteRepository.delete(id);
     if (!note) throw new Error("Note not found");
     return { message: "Note deleted successfully" };

@@ -14,7 +14,7 @@ const noteMongoRepository = new NoteMongoRepository(); // se puede cambiar a Not
 
 const noteMySQLRepository = new NoteMySQLRepository(); // se puede cambiar a NoteMongoRepository sin afectar el resto del codigo, ya que el controlador no tiene que preocuparse por la base de datos, y se puede cambiar facilmente sin afectar el resto del codigo.
 const mailService = new MailService();
-const noteService = new NoteService(noteMySQLRepository, mailService); // actualmente se esta usando MySQL, pero se puede cambiar a MongoDB sin afectar el resto del codigo, ya que el controlador no tiene que preocuparse por la base de datos, y se puede cambiar facilmente sin afectar el resto del codigo.
+const noteService = new NoteService(noteMongoRepository, mailService); // actualmente se esta usando MySQL, pero se puede cambiar a MongoDB sin afectar el resto del codigo, ya que el controlador no tiene que preocuparse por la base de datos, y se puede cambiar facilmente sin afectar el resto del codigo.
 const noteController = new NoteController(noteService); // se le inyecta el servicio al controlador, para que el controlador pueda usar los metodos del servicio, y el servicio se encargue de la logica de negocio, y el controlador se encargue de manejar las peticiones y respuestas, sin preocuparse por la logica de negocio, y se pueda cambiar facilmente la logica de negocio sin afectar el controlador, y viceversa.
 
 
@@ -68,7 +68,7 @@ router.post("/", authMiddleware, upload.single('image'), noteController.createNo
  *         description: No autenticado (token faltante o inválido)
  */
 router.get("/", authMiddleware, noteController.getNotesByUserId);
-
+router.get("/:id", authMiddleware, noteController.getNoteById);
 router.put("/:id", authMiddleware, upload.single('image'), noteController.updateNote);
 router.delete("/:id", authMiddleware, roleMiddleware(["admin"]), noteController.deleteNote);
 router.post("/:id/share", authMiddleware, noteController.shareNote);

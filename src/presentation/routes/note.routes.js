@@ -69,8 +69,112 @@ router.post("/", authMiddleware, upload.single('image'), noteController.createNo
  */
 router.get("/", authMiddleware, noteController.getNotesByUserId);
 router.get("/:id", authMiddleware, noteController.getNoteById);
+/**
+ * @swagger
+ * /notes/{id}:
+ *   put:
+ *     summary: Actualizar una nota existente
+ *     tags: [Notes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID único de la nota
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Nota actualizada exitosamente
+ *       404:
+ *         description: Nota no encontrada
+ */
 router.put("/:id", authMiddleware, upload.single('image'), noteController.updateNote);
+/**
+ * @swagger
+ * /notes/{id}:
+ *   delete:
+ *     summary: Eliminar una nota (Solo Admins)
+ *     tags: [Notes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Nota eliminada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Note deleted successfully"
+ *       403:
+ *         description: Acceso denegado (Requiere rol admin)
+ *       404:
+ *         description: Nota no encontrada
+ */
 router.delete("/:id", authMiddleware, roleMiddleware(["admin"]), noteController.deleteNote);
+/**
+ * @swagger
+ * /notes/{id}/share:
+ *   post:
+ *     summary: Compartir una nota por email
+ *     tags: [Notes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "amigo@example.com"
+ *     responses:
+ *       200:
+ *         description: Email enviado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Email sent successfully"
+ *       400:
+ *         description: No se pudo enviar el correo o no es dueño de la nota
+ */
 router.post("/:id/share", authMiddleware, noteController.shareNote);
 
 export default router;

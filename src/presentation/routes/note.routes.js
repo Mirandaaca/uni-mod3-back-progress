@@ -68,6 +68,7 @@ router.post("/", authMiddleware, upload.single('image'), noteController.createNo
  *         description: No autenticado (token faltante o inválido)
  */
 router.get("/", authMiddleware, noteController.getNotesByUserId);
+router.get("/category/:categoryId", authMiddleware, noteController.getNotesByCategoryId);
 router.get("/:id", authMiddleware, noteController.getNoteById);
 /**
  * @swagger

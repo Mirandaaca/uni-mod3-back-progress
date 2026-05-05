@@ -36,6 +36,21 @@ export default class NoteController {
       res.status(404).json({ error: error.message });
     }
   };
+
+  getNotesByCategoryId = async (req, res) => {
+    const categoryId = Number(req.params.categoryId);
+
+    if (!Number.isFinite(categoryId)) {
+      return res.status(400).json({ error: "categoryId must be a number" });
+    }
+
+    try {
+      const notes = await this.noteService.getNotesByCategoryId(categoryId);
+      res.status(200).json(notes);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
   updateNote = async (req, res) => {
     const { id } = req.params;
     const data = req.body;

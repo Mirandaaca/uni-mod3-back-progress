@@ -22,6 +22,13 @@ export default class NoteService {
     return note;
   }
 
+  async getPublicNoteById(id) {
+    const note = await this.noteRepository.findById(id);
+    if (!note) throw new Error("Note not found");
+    if (note.isPrivate === true) throw new Error("Note is private");
+    return note;
+  }
+
   async getNotesByUserId(userId) {
     return await this.noteRepository.findByUserId(userId);
   }

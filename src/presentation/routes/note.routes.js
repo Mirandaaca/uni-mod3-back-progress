@@ -69,6 +69,7 @@ router.post("/", authMiddleware, upload.single('image'), noteController.createNo
  */
 router.get("/", authMiddleware, noteController.getNotesByUserId);
 router.get("/category/:categoryId", authMiddleware, noteController.getNotesByCategoryId);
+router.get("/:id/public", noteController.getPublicNoteById);
 router.get("/:id", authMiddleware, noteController.getNoteById);
 /**
  * @swagger

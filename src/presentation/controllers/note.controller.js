@@ -27,6 +27,23 @@ export default class NoteController {
       res.status(404).json({ error: error.message });
     }
   };
+
+  getPublicNoteById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const note = await this.noteService.getPublicNoteById(id);
+      res.status(200).json(note);
+    } catch (error) {
+      if (error.message === "Note is private") {
+        return res.status(403).json({ error: "Access denied" });
+      }
+      if (error.message === "Note not found") {
+        return res.status(404).json({ error: error.message });
+      }
+      return res.status(400).json({ error: error.message });
+    }
+  };
   getNotesByUserId = async (req, res) => {
     const userId = req.user.id;
     try {

@@ -9,6 +9,7 @@ export default class NoteMySQLRepository {
       isPrivate: noteEntity.isPrivate,
       password: noteEntity.password,
       userId: noteEntity.userId,
+      categoryId: noteEntity.categoryId
     });
     // Se llama al metodo toJSON de sequelize, para convertir el objeto note a un objeto plano, y se retorna el resultado
     return note.toJSON();
@@ -16,6 +17,9 @@ export default class NoteMySQLRepository {
   async findByUserId(userId) {
     // Se llama al metodo findAll de sequelize, y se le pasa el userId, para que busque las notas del usuario en la base de datos, y se retorna el resultado
     return await NoteModel.findAll({ where: { userId } });
+  }
+  async findByCategoryId(categoryId) {
+    return await NoteModel.findAll({ where: { categoryId } });
   }
   async findById(id) {
     const note = await NoteModel.findByPk(id);
